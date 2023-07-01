@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lx.shop.dao.mapper.GoodsMapper">
+
+    <select id="getGoodsInfoByCondition" resultType="com.lx.shop.vo.params.GoodsParam">
+        select g.gid,gi.gimg,g.gname,gc.type,gb.gb_name,gi.gdesc,gi.gprice,gi.gcurrent,gi.gsales,gi.gweight,gi.gstock
+        from goods as g left join
+        goods_info as gi on g.gid = gi.gid  left join
+        goods_class as gc on g.gclass_id =gc.gcid left join
+        goods_brand as gb on  g.gbrand_id = gb.gbid
+        <where>
+
+            <if test="gclassId !=null ">
+                and g.gclass_id =#{gclassId}
+            </if>
+            <if test=" gbrandId !=null">
+                and g.gbrand_id =#{gbrandId}
+            </if>
+
+        </where>
+
+        <choose>
+            <when test="sortFlag =='销量' ">
+                ORDER BY gi.gsales Desc
+            </when>
+        </choose>
+    </select>
+
+</mapper>
